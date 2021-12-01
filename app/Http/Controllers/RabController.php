@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Journal;
+use App\Models\Rab;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class JournalController extends Controller
+class RabController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,9 @@ class JournalController extends Controller
      */
     public function index()
     {
-        $journals = Journal::where('user_id', Auth::user()->id)->get();
+        $rabs = Rab::all();
 
-        return view('journals.index', compact('journals'));
+        return view('rab.index', compact('rabs'));
     }
 
     /**
@@ -27,7 +26,7 @@ class JournalController extends Controller
      */
     public function create()
     {
-        return view('journals.create');
+        return view('rab.create');
     }
 
     /**
@@ -40,16 +39,13 @@ class JournalController extends Controller
     {
         $data = $request->all();
 
-        if ($request->file('foto') != NULL) {
-            $data['foto'] = $request->file('foto')->store('foto_journal', 'public');
-        }
-        if ($request->file('document') != NULL) {
-            $data['document'] = $request->file('document')->store('document_journal', 'public');
+        if ($request->file('doc_rab')) {
+            $data['doc_rab'] = $request->file('doc_rab')->store('doc_rab', 'public');
         }
 
-        Journal::create($data);
+        Rab::create($data);
 
-        return redirect()->route('journal.index');
+        return redirect()->route('rab.index');
     }
 
     /**
@@ -71,9 +67,9 @@ class JournalController extends Controller
      */
     public function edit($id)
     {
-        $journal = Journal::find($id);
+        $rab = Rab::find($id);
 
-        return view('journals.edit', compact('journal'));
+        return view('rab.edit', compact('rab'));
     }
 
     /**
@@ -87,16 +83,13 @@ class JournalController extends Controller
     {
         $data = $request->all();
 
-        if ($request->file('foto') != NULL) {
-            $data['foto'] = $request->file('foto')->store('foto_journal', 'public');
-        }
-        if ($request->file('document') != NULL) {
-            $data['document'] = $request->file('document')->store('document_journal', 'public');
+        if ($request->file('doc_rab')) {
+            $data['doc_rab'] = $request->file('doc_rab')->store('doc_rab', 'public');
         }
 
-        Journal::find($id)->update($data);
+        Rab::find($id)->update($data);
 
-        return redirect()->route('journal.index');
+        return redirect()->route('rab.index');
     }
 
     /**
@@ -107,14 +100,14 @@ class JournalController extends Controller
      */
     public function destroy($id)
     {
-        Journal::find($id)->delete();
+        Rab::find($id)->delete();
 
         return redirect()->back();
     }
 
     public function confirm(Request $request, $id)
     {
-        Journal::find($id)->update([
+        Rab::find($id)->update([
             'status' => $request->status
         ]);
 
@@ -123,7 +116,7 @@ class JournalController extends Controller
 
     public function download($id)
     {
-        $i = Journal::find($id)->foto_journal;
+        $i = Rab::find($id)->doc_rab;
 
         return response()->download(storage_path('app/public/'. $i));
     }

@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
+use App\Models\Reimburstment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-class AttendanceController extends Controller
+use function GuzzleHttp\Promise\all;
+
+class ReimburstmentController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -20,24 +16,9 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role->name == 'karyawan') {
-            $attendances = Attendance::where('user_id', Auth::user()->id)->get();
+        $reims = Reimburstment::all();
 
-            return view('attendance.index', compact('attendances'));
-        }elseif(Auth::user()->role->name == 'administrasi'){
-            $attendances = DB::table('attendances')
-                                ->join('users', 'attendances.user_id', 'users.id')
-                                ->select('attendances.*', 'users.name', 'users.office_id')
-                                ->where('office_id', '=' ,Auth::user()->office_id)
-                                ->get();
-            // dd($attendances);
-
-            return view('attendance.index', compact('attendances'));
-        }else{
-            $attendances = Attendance::all();
-
-            return view('attendance.index', compact('attendances'));
-        }
+        return view('reimburstment.index', compact('reims'));
     }
 
     /**
@@ -47,7 +28,7 @@ class AttendanceController extends Controller
      */
     public function create()
     {
-        //
+        return view('reimburstment.create');
     }
 
     /**
@@ -58,7 +39,9 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Reimburstment::create($request->all());
+
+        return redirect()->route('reimburstment.index');
     }
 
     /**
@@ -80,7 +63,9 @@ class AttendanceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $reim = Reimburstment::find($id);
+
+        return view('reimburstment.edit', compact('reim'));
     }
 
     /**
@@ -92,7 +77,9 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Reimburstment::find($id)->update($request->all());
+
+        return redirect()->route('reimburstment.index');
     }
 
     /**
@@ -103,6 +90,8 @@ class AttendanceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Reimburstment::find($id)->delete();
+
+        return redirect()->back();
     }
 }

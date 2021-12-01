@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
+use App\Models\Asset;
+use App\Models\Office;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-class AttendanceController extends Controller
+class AssetController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -20,24 +15,9 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role->name == 'karyawan') {
-            $attendances = Attendance::where('user_id', Auth::user()->id)->get();
+        $assets = Asset::all();
 
-            return view('attendance.index', compact('attendances'));
-        }elseif(Auth::user()->role->name == 'administrasi'){
-            $attendances = DB::table('attendances')
-                                ->join('users', 'attendances.user_id', 'users.id')
-                                ->select('attendances.*', 'users.name', 'users.office_id')
-                                ->where('office_id', '=' ,Auth::user()->office_id)
-                                ->get();
-            // dd($attendances);
-
-            return view('attendance.index', compact('attendances'));
-        }else{
-            $attendances = Attendance::all();
-
-            return view('attendance.index', compact('attendances'));
-        }
+        return view('assets.index', compact('assets'));
     }
 
     /**
@@ -47,7 +27,9 @@ class AttendanceController extends Controller
      */
     public function create()
     {
-        //
+        $offices = Office::all();
+
+        return view('assets.create', compact('offices'));
     }
 
     /**
@@ -58,7 +40,9 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Asset::create($request->all());
+
+        return redirect()->route('assets.index');
     }
 
     /**
@@ -80,7 +64,10 @@ class AttendanceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $asset = Asset::find($id);
+        $offices = Office::all();
+
+        return view('assets.edit', compact('asset', 'offices'));
     }
 
     /**
@@ -92,7 +79,9 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Asset::find($id)->update($request->all());
+
+        return redirect()->route('assets.index');
     }
 
     /**
@@ -103,6 +92,8 @@ class AttendanceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Asset::find($id)->delete();
+
+        return redirect()->back();
     }
 }

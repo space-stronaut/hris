@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
+use App\Models\Payroll;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-class AttendanceController extends Controller
+class PayrollController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -21,22 +17,11 @@ class AttendanceController extends Controller
     public function index()
     {
         if (Auth::user()->role->name == 'karyawan') {
-            $attendances = Attendance::where('user_id', Auth::user()->id)->get();
-
-            return view('attendance.index', compact('attendances'));
-        }elseif(Auth::user()->role->name == 'administrasi'){
-            $attendances = DB::table('attendances')
-                                ->join('users', 'attendances.user_id', 'users.id')
-                                ->select('attendances.*', 'users.name', 'users.office_id')
-                                ->where('office_id', '=' ,Auth::user()->office_id)
-                                ->get();
-            // dd($attendances);
-
-            return view('attendance.index', compact('attendances'));
+            $pays = Payroll::where('user_id', Auth::user()->id)->get();
+            return view('payroll.index', compact('pays'));
         }else{
-            $attendances = Attendance::all();
-
-            return view('attendance.index', compact('attendances'));
+            $pays = Payroll::all();
+            return view('payroll.index', compact('pays'));
         }
     }
 
@@ -47,7 +32,9 @@ class AttendanceController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::all();
+
+        return view('payroll.create', compact('users'));
     }
 
     /**
@@ -58,7 +45,9 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Payroll::create($request->all());
+
+        return redirect()->route('payroll.index');
     }
 
     /**
@@ -80,7 +69,9 @@ class AttendanceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pay = Payroll::find($id);
+
+        return view('payroll.edit', compact('pay'));
     }
 
     /**
@@ -92,7 +83,9 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Payroll::find($id)->update($request->all());
+
+        return redirect()->route('payroll.index');
     }
 
     /**
@@ -103,6 +96,8 @@ class AttendanceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Payroll::find($id)->delete();
+
+        return redirect()->back();
     }
 }

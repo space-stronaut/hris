@@ -4,10 +4,10 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <div>
-                My Journal
+                Paklaring
             </div>
             <div>
-                <a href="{{ route('journal.create') }}" class="btn btn-primary">Tambah Journal</a>
+                <a href="{{ route('paklarings.create') }}" class="btn btn-primary">Tambah Paklaring</a>
             </div>
         </div>
         <div class="card-body">
@@ -16,50 +16,50 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Nama</th>
-                        <th scope="col">Deskripsi</th>
-                        <th scope="col">Foto</th>
-                        <th scope="col">Dokumen</th>
+                        <th scope="col">Doc</th>
+                        <th scope="col">Request Date</th>
+                        <th scope="col">Description</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Unduh</th>
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($journals as $item)
+                    @forelse ($paks as $item)
                     <tr>
                         <th scope="row">{{ $loop->iteration }}</th>
                         <td>
                             {{$item->user->name}}
                         </td>
                         <td>
+                            {{Storage::url($item->doc_paklaring)}}
+                        </td>
+                        <td>
+                            {{$item->req_date}}
+                        </td>
+                        <td>
                             {{$item->description}}
                         </td>
                         <td>
-                            <img style="max-width: 50%" src="{{Storage::url($item->foto)}}" />
+                            {{$item->status}}
                         </td>
                         <td>
-                            {{ Storage::url($item->document) }}
-                        </td>
-                        <td>
-                            <a href="{{ route('rab.download', $item->id) }}" class="btn btn-info">Unduh</a>
-                        </td>
-                        <td>
-                            <div class="badge badge-info text-uppercase">{{ $item->status }}</div>
+                            <a href="{{ route('paklaring.download', $item->id) }}" class="btn btn-info">Unduh</a>
                         </td>
                         <td class="d-flex">
-                            <a href="{{ route('journal.edit', $item->id) }}" class="btn btn-success">Edit</a>
-                            <form action="{{ route('journal.destroy', $item->id) }}" method="POST">
+                            <a href="{{ route('paklarings.edit', $item->id) }}" class="btn btn-success">Edit</a>
+                            <form action="{{ route('paklarings.destroy', $item->id) }}" method="POST">
                             @csrf
                             @method('delete')
                                 <button type="submit" onclick="return confirm('Apa anda yakin ingin menghapusnya?')" class="btn btn-danger ml-2">Hapus</button>
                             </form>
-                            <form action="{{ route('journal.confirm', $item->id) }}" method="POST">
+                            <form action="{{ route('paklaring.confirm', $item->id) }}" method="POST">
                                 @csrf
                                 {{-- @method('delete') --}}
                                 <input type="hidden" name="status" value="disetujui">
                                     <button type="submit" onclick="return confirm('Apa anda yakin ingin menyetujuinya?')" class="btn btn-info ml-2">Setujui</button>
                                 </form>
-                                <form action="{{ route('journal.confirm', $item->id) }}" method="POST">
+                                <form action="{{ route('paklaring.confirm', $item->id) }}" method="POST">
                                     @csrf
                                     {{-- @method('delete') --}}
                                     <input type="hidden" name="status" value="ditolak">

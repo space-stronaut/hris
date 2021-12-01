@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
+use App\Models\Partnership;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-class AttendanceController extends Controller
+class PartnershipController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -20,24 +14,9 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role->name == 'karyawan') {
-            $attendances = Attendance::where('user_id', Auth::user()->id)->get();
+        $parts = Partnership::all();
 
-            return view('attendance.index', compact('attendances'));
-        }elseif(Auth::user()->role->name == 'administrasi'){
-            $attendances = DB::table('attendances')
-                                ->join('users', 'attendances.user_id', 'users.id')
-                                ->select('attendances.*', 'users.name', 'users.office_id')
-                                ->where('office_id', '=' ,Auth::user()->office_id)
-                                ->get();
-            // dd($attendances);
-
-            return view('attendance.index', compact('attendances'));
-        }else{
-            $attendances = Attendance::all();
-
-            return view('attendance.index', compact('attendances'));
-        }
+        return view('partnerships.index', compact('parts'));
     }
 
     /**
@@ -47,7 +26,7 @@ class AttendanceController extends Controller
      */
     public function create()
     {
-        //
+        return view('partnerships.create');
     }
 
     /**
@@ -58,7 +37,9 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Partnership::create($request->all());
+
+        return redirect()->route('partnerships.index');
     }
 
     /**
@@ -80,7 +61,9 @@ class AttendanceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $part = Partnership::find($id);
+
+        return view('partnerships.edit', compact('part'));
     }
 
     /**
@@ -92,7 +75,9 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Partnership::find($id)->update($request->all());
+
+        return redirect()->route('partnerships.index');
     }
 
     /**
@@ -103,6 +88,8 @@ class AttendanceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Partnership::find($id)->delete();
+
+        return redirect()->back();
     }
 }

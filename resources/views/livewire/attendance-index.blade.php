@@ -36,6 +36,7 @@
                 </tr>
             </thead>
             <tbody>
+                @if (Auth::user()->role->name != 'administrasi')
                 @forelse ($attendances as $item)
                 <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
@@ -77,6 +78,50 @@
                     <th scope="row">Belum ada data</th>
                 </tr>
                 @endforelse
+                @else
+                {{-- {{$attendances}} --}}
+                    @forelse ($attendances as $item)
+                        <tr>
+                            <th>{{ $loop->iteration }}</th>
+                            <td>
+                                {{$item->name}}
+                            </td>
+                            <td>
+                                {{
+                                    Carbon\Carbon::parse($item->date)->format('d M Y')
+                                }}
+                            </td>
+                            <td>
+                                {{$item->location_clock_in}}
+                            </td>
+                            <td>
+                                {{
+                                    Carbon\Carbon::parse($item->clock_in)->format('H : i')
+                                }}
+                            </td>
+                            @if ($item->clock_out == NULL)
+                                <td>
+                                    <form wire:submit.prevent="absenKeluar({{$item->id}})">
+                                        <button type="submit" class="btn btn-info">Absen Keluar</button>
+                                    </form>
+                                </td>
+                            @else
+                            <td>
+                                {{$item->location_clock_out}}
+                            </td>
+                            <td>
+                                {{
+                                    Carbon\Carbon::parse($item->clock_out)->format('H : i')
+                                }}
+                            </td>
+                            @endif
+                        </tr>
+                    @empty
+                        <tr>
+                            <th>Belum Ada Data</th>
+                        </tr>
+                    @endforelse
+                @endif
             </tbody>
         </table>
     </div>

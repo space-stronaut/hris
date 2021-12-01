@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use Carbon\Carbon;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class AttendanceIndex extends Component
@@ -13,8 +14,24 @@ class AttendanceIndex extends Component
     protected $listeners = ['absenMasuk', 'keluarSuccess'];
     public function render()
     {
-        $attendances = Attendance::where('user_id', Auth::user()->id)->get();
-        return view('livewire.attendance-index', compact('attendances'));
+        if (Auth::user()->role->name == 'karyawan') {
+            $attendances = Attendance::where('user_id', Auth::user()->id)->get();
+
+            return view('livewire.attendance-index', compact('attendances'));
+        }elseif(Auth::user()->role->name == 'administrasi'){
+            $attendances = DB::table('attendances')
+                                ->join('users', 'attendances.user_id', 'users.id')
+                                ->select('attendances.*', 'users.name', 'users.office_id')
+                                ->where('office_id', '=' ,Auth::user()->office_id)
+                                ->get();
+            // dd($attendances);
+
+            return view('livewire.attendance-index', compact('attendances'));
+        }else{
+            $attendances = Attendance::all();
+
+            return view('livewire.attendance-index', compact('attendances'));
+        }
     }
 
     public function absenMasuk()

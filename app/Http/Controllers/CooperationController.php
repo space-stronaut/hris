@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Journal;
+use App\Models\Cooperation;
+use App\Models\Partnership;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class JournalController extends Controller
+use function GuzzleHttp\Promise\all;
+
+class CooperationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +17,9 @@ class JournalController extends Controller
      */
     public function index()
     {
-        $journals = Journal::where('user_id', Auth::user()->id)->get();
+        $coops = Cooperation::all();
 
-        return view('journals.index', compact('journals'));
+        return view('cooperation.index', compact('coops'));
     }
 
     /**
@@ -27,7 +29,10 @@ class JournalController extends Controller
      */
     public function create()
     {
-        return view('journals.create');
+
+        $parts = Partnership::all();
+
+        return view('cooperation.create', compact('parts'));
     }
 
     /**
@@ -40,16 +45,13 @@ class JournalController extends Controller
     {
         $data = $request->all();
 
-        if ($request->file('foto') != NULL) {
-            $data['foto'] = $request->file('foto')->store('foto_journal', 'public');
-        }
-        if ($request->file('document') != NULL) {
-            $data['document'] = $request->file('document')->store('document_journal', 'public');
+        if ($request->file('file_req')) {
+            $data['file_req'] = $request->file('file_req')->store('file_req', 'public');
         }
 
-        Journal::create($data);
+        Cooperation::create($data);
 
-        return redirect()->route('journal.index');
+        return redirect()->route('cooperation.index');
     }
 
     /**
@@ -71,9 +73,10 @@ class JournalController extends Controller
      */
     public function edit($id)
     {
-        $journal = Journal::find($id);
+        $parts = Partnership::all();
+        $coop = Cooperation::find($id);
 
-        return view('journals.edit', compact('journal'));
+        return view('cooperation.edit', compact('coop', 'parts'));
     }
 
     /**
@@ -87,16 +90,13 @@ class JournalController extends Controller
     {
         $data = $request->all();
 
-        if ($request->file('foto') != NULL) {
-            $data['foto'] = $request->file('foto')->store('foto_journal', 'public');
-        }
-        if ($request->file('document') != NULL) {
-            $data['document'] = $request->file('document')->store('document_journal', 'public');
+        if ($request->file('file_req')) {
+            $data['file_req'] = $request->file('file_req')->store('file_req', 'public');
         }
 
-        Journal::find($id)->update($data);
+        Cooperation::find($id)->update($data);
 
-        return redirect()->route('journal.index');
+        return redirect()->route('cooperation.index');
     }
 
     /**
@@ -107,14 +107,14 @@ class JournalController extends Controller
      */
     public function destroy($id)
     {
-        Journal::find($id)->delete();
+        Cooperation::find($id)->delete();
 
         return redirect()->back();
     }
 
     public function confirm(Request $request, $id)
     {
-        Journal::find($id)->update([
+        Cooperation::find($id)->update([
             'status' => $request->status
         ]);
 
@@ -123,7 +123,7 @@ class JournalController extends Controller
 
     public function download($id)
     {
-        $i = Journal::find($id)->foto_journal;
+        $i = Cooperation::find($id)->file_req;
 
         return response()->download(storage_path('app/public/'. $i));
     }

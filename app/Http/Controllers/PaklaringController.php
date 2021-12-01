@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Journal;
+use App\Models\Paklaring;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class JournalController extends Controller
+class PaklaringController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,9 @@ class JournalController extends Controller
      */
     public function index()
     {
-        $journals = Journal::where('user_id', Auth::user()->id)->get();
+        $paks = Paklaring::all();
 
-        return view('journals.index', compact('journals'));
+        return view('paklarings.index', compact('paks'));
     }
 
     /**
@@ -27,7 +26,7 @@ class JournalController extends Controller
      */
     public function create()
     {
-        return view('journals.create');
+        return view('paklarings.create');
     }
 
     /**
@@ -40,16 +39,15 @@ class JournalController extends Controller
     {
         $data = $request->all();
 
-        if ($request->file('foto') != NULL) {
-            $data['foto'] = $request->file('foto')->store('foto_journal', 'public');
-        }
-        if ($request->file('document') != NULL) {
-            $data['document'] = $request->file('document')->store('document_journal', 'public');
+        if ($request->file('doc_paklaring')) {
+            $data['doc_paklaring'] = $request->file('doc_paklaring')->store('doc_paklaring', 'public');
         }
 
-        Journal::create($data);
+        $data['req_date'] = now();
 
-        return redirect()->route('journal.index');
+        Paklaring::create($data);
+
+        return redirect()->route('paklarings.index');
     }
 
     /**
@@ -71,9 +69,9 @@ class JournalController extends Controller
      */
     public function edit($id)
     {
-        $journal = Journal::find($id);
+        $pak = Paklaring::find($id);
 
-        return view('journals.edit', compact('journal'));
+        return view('paklarings.edit', compact('pak'));
     }
 
     /**
@@ -87,16 +85,15 @@ class JournalController extends Controller
     {
         $data = $request->all();
 
-        if ($request->file('foto') != NULL) {
-            $data['foto'] = $request->file('foto')->store('foto_journal', 'public');
-        }
-        if ($request->file('document') != NULL) {
-            $data['document'] = $request->file('document')->store('document_journal', 'public');
+        if ($request->file('doc_paklaring')) {
+            $data['doc_paklaring'] = $request->file('doc_paklaring')->store('doc_paklaring', 'public');
         }
 
-        Journal::find($id)->update($data);
+        $data['req_date'] = now();
 
-        return redirect()->route('journal.index');
+        Paklaring::find($id)->update($data);
+
+        return redirect()->route('paklarings.index');
     }
 
     /**
@@ -107,14 +104,14 @@ class JournalController extends Controller
      */
     public function destroy($id)
     {
-        Journal::find($id)->delete();
+        Paklaring::find($id)->delete();
 
         return redirect()->back();
     }
 
     public function confirm(Request $request, $id)
     {
-        Journal::find($id)->update([
+        Paklaring::find($id)->update([
             'status' => $request->status
         ]);
 
@@ -123,7 +120,7 @@ class JournalController extends Controller
 
     public function download($id)
     {
-        $i = Journal::find($id)->foto_journal;
+        $i = Paklaring::find($id)->doc_paklaring;
 
         return response()->download(storage_path('app/public/'. $i));
     }

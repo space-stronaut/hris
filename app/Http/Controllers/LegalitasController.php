@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
+use App\Models\Legalitas;
+use App\Models\Office;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-class AttendanceController extends Controller
+class LegalitasController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -20,24 +15,9 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role->name == 'karyawan') {
-            $attendances = Attendance::where('user_id', Auth::user()->id)->get();
+        $legals = Legalitas::all();
 
-            return view('attendance.index', compact('attendances'));
-        }elseif(Auth::user()->role->name == 'administrasi'){
-            $attendances = DB::table('attendances')
-                                ->join('users', 'attendances.user_id', 'users.id')
-                                ->select('attendances.*', 'users.name', 'users.office_id')
-                                ->where('office_id', '=' ,Auth::user()->office_id)
-                                ->get();
-            // dd($attendances);
-
-            return view('attendance.index', compact('attendances'));
-        }else{
-            $attendances = Attendance::all();
-
-            return view('attendance.index', compact('attendances'));
-        }
+        return view('legalitas.index', compact('legals'));
     }
 
     /**
@@ -47,7 +27,9 @@ class AttendanceController extends Controller
      */
     public function create()
     {
-        //
+        $offices = Office::all();
+
+        return view('legalitas.create', compact('offices'));
     }
 
     /**
@@ -58,7 +40,9 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Legalitas::create($request->all());
+
+        return redirect()->route('legalitas.index');
     }
 
     /**
@@ -80,7 +64,11 @@ class AttendanceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $legal = Legalitas::find($id);
+
+        $offices = Office::all();
+
+        return view('legalitas.edit', compact('legal', 'offices'));
     }
 
     /**
@@ -92,7 +80,9 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Legalitas::find($id)->update($request->all());
+
+        return redirect()->route('legalitas.index');
     }
 
     /**
@@ -103,6 +93,8 @@ class AttendanceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Legalitas::find($id)->delete();
+
+        return redirect()->back();
     }
 }
