@@ -16,7 +16,11 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Nama User</th>
-                        <th scope="col">Tipe</th>
+                        <th scope="col">Agenda</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Peserta</th>
+                        <th scope="col">Anggaran</th>
+                        <th scope="col">Keterangan</th>
                         <th scope="col">Nama</th>
                         <th scope="col">Dokumen</th>
                         <th scope="col">Status</th>
@@ -32,7 +36,16 @@
                             {{$item->user->name}}
                         </td>
                         <td>
-                            {{$item->type}}
+                            {{$item->agenda}}
+                        </td>
+                        <td>
+                            {{$item->date}}
+                        </td>
+                        <td>
+                            {{$item->peserta}}
+                        </td>
+                        <td>
+                            {{$item->anggaran}}
                         </td>
                         <td>
                             {{$item->name}}
@@ -53,6 +66,7 @@
                             @method('delete')
                                 <button type="submit" onclick="return confirm('Apa anda yakin ingin menghapusnya?')" class="btn btn-danger ml-2">Hapus</button>
                             </form>
+                            @if (Auth::user()->role->name == 'direksi' || Auth::user()->role->name == 'manajemen')
                             <form action="{{ route('rab.confirm', $item->id) }}" method="POST">
                                 @csrf
                                 {{-- @method('delete') --}}
@@ -65,6 +79,7 @@
                                     <input type="hidden" name="status" value="ditolak">
                                         <button type="submit" onclick="return confirm('Apa anda yakin ingin menolaknya?')" class="btn btn-secondary ml-2">Tolak</button>
                                     </form>
+                            @endif
                         </td>
                     </tr>
                     @empty

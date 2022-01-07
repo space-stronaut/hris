@@ -36,7 +36,7 @@
                             {{$item->salary_recap}}
                         </td>
                         <td>
-                            {{$item->salary_recap}}
+                            <a href="{{ route('payroll.download', $item->id) }}" class="btn btn-warning">Unduh</a>
                         </td>
                         <td class="d-flex">
                             <a href="{{ route('payroll.edit', $item->id) }}" class="btn btn-success">Edit</a>

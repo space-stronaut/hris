@@ -11,8 +11,28 @@
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                 <input type="hidden" name="status" value="proses">
                 <div class="form-group">
-                    <label for="">Type</label>
-                    <input type="text" name="type" id="" class="form-control">
+                    <label for="">Agenda</label>
+                    <input type="text" name="agenda" id="" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">Lokasi</label>
+                    <input type="text" name="lokasi" id="" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">Date</label>
+                    <input type="date" name="date" id="" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">Peserta</label>
+                    <input type="text" name="peserta" id="" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">Jumlah anggaran</label>
+                    <input type="text" name="anggaran" id="" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">Keterangan</label>
+                    <input type="text" name="keterangan" id="" class="form-control">
                 </div>
                 <div class="form-group">
                     <label for="">Doc</label>

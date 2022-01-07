@@ -4,6 +4,7 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BpjsController;
 use App\Http\Controllers\CooperationController;
+use App\Http\Controllers\CutiController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\LegalitasController;
 use App\Http\Controllers\OfficeController;
@@ -58,3 +59,6 @@ Route::post('/bpjs/confirm/{id}', [BpjsController::class, 'confirm'])->name('bpj
 Route::get('/bpjs/download/{id}', [BpjsController::class, 'download'])->name('bpjs.download');
 Route::post('/paklaring/confirm/{id}', [PaklaringController::class, 'confirm'])->name('paklaring.confirm');
 Route::get('/paklaring/download/{id}', [PaklaringController::class, 'download'])->name('paklaring.download');
+Route::resource('cuti', CutiController::class);
+Route::post('/cuti/validasi/{id}', [CutiController::class, 'validasi'])->name('cuti.validasi');
+Route::get('/payroll/download/{id}', [PayrollController::class, 'download'])->name('payroll.download');

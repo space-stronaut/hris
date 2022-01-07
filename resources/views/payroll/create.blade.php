@@ -26,7 +26,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Salary Slip</label>
-                    <input type="text" class="form-control" name="salary_slip">
+                    <input type="file" class="form-control" name="salary_slip">
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Submit</button>

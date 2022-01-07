@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payroll;
-use App\Models\User;
+use App\Models\Cuti;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PayrollController extends Controller
+class CutiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,12 +16,12 @@ class PayrollController extends Controller
     public function index()
     {
         if (Auth::user()->role->name == 'karyawan') {
-            $pays = Payroll::where('user_id', Auth::user()->id)->get();
-            return view('payroll.index', compact('pays'));
+            $cutis = Cuti::where('user_id', Auth::user()->id)->get();
         }else{
-            $pays = Payroll::all();
-            return view('payroll.index', compact('pays'));
+            $cutis = Cuti::all();
         }
+
+        return view('cuti.index', compact('cutis'));
     }
 
     /**
@@ -32,9 +31,7 @@ class PayrollController extends Controller
      */
     public function create()
     {
-        $users = User::all();
-
-        return view('payroll.create', compact('users'));
+        return view('cuti.create');
     }
 
     /**
@@ -45,14 +42,9 @@ class PayrollController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        Cuti::create($request->all());
 
-        if ($request->file('salary_slip')) {
-            $data['salary_slip'] = $request->file('salary_slip')->store('salary_slip', 'public');
-        }
-        Payroll::create($data);
-
-        return redirect()->route('payroll.index');
+        return redirect()->route('cuti.index');
     }
 
     /**
@@ -63,7 +55,9 @@ class PayrollController extends Controller
      */
     public function show($id)
     {
-        //
+        $cuti = Cuti::find($id);
+
+        return view('cuti.show', compact('cuti'));
     }
 
     /**
@@ -74,9 +68,9 @@ class PayrollController extends Controller
      */
     public function edit($id)
     {
-        $pay = Payroll::find($id);
+        $cuti = Cuti::find($id);
 
-        return view('payroll.edit', compact('pay'));
+        return view('cuti.edit', compact('cuti'));
     }
 
     /**
@@ -88,21 +82,9 @@ class PayrollController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->all();
+        Cuti::find($id)->update($request->all());
 
-        if ($request->file('salary_slip')) {
-            $data['salary_slip'] = $request->file('salary_slip')->store('salary_slip', 'public');
-        }
-        Payroll::find($id)->update($data);
-
-        return redirect()->route('payroll.index');
-    }
-
-    public function download($id)
-    {
-        $i = Payroll::find($id)->salary_slip;
-
-        return response()->download(storage_path('app/public/'. $i));
+        return redirect()->route('cuti.index');
     }
 
     /**
@@ -113,7 +95,16 @@ class PayrollController extends Controller
      */
     public function destroy($id)
     {
-        Payroll::find($id)->delete();
+        Cuti::find($id)->delete();
+
+        return redirect()->back();
+    }
+
+    public function validasi(Request $request, $id)
+    {
+        Cuti::find($id)->update([
+            'status' => $request->status
+        ]);
 
         return redirect()->back();
     }

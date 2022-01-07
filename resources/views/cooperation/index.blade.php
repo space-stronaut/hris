@@ -61,6 +61,7 @@
                             @method('delete')
                                 <button type="submit" onclick="return confirm('Apa anda yakin ingin menghapusnya?')" class="btn btn-danger ml-2">Hapus</button>
                             </form>
+                            @if (Auth::user()->role->name == 'direksi' || Auth::user()->role->name == 'manajemen')
                             <form action="{{ route('cooperation.confirm', $item->id) }}" method="POST">
                                 @csrf
                                 {{-- @method('delete') --}}
@@ -73,6 +74,7 @@
                                     <input type="hidden" name="status" value="ditolak">
                                         <button type="submit" onclick="return confirm('Apa anda yakin ingin menolaknya?')" class="btn btn-secondary ml-2">Tolak</button>
                                     </form>
+                            @endif
                         </td>
                     </tr>
                     @empty

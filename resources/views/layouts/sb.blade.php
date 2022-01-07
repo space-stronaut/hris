@@ -65,15 +65,28 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('role.index') }}">Role Management</a>
-                        <a class="collapse-item" href="{{ route('user.index') }}">Users</a>
+                        @if (Auth::user()->role->name == 'administrator')
+                            <a class="collapse-item" href="{{ route('role.index') }}">Role Management</a>
+                        @endif
+                        @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'direksi' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen')
+                            <a class="collapse-item" href="{{ route('user.index') }}">Users</a>
+                        @endif
+                        @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'direksi' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen')
                         <a href="{{ route('payroll.index') }}" class="collapse-item">Payroll</a>
+                        @endif
+                        @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'direksi' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen')
                         <a class="collapse-item" href="{{ route('office.index') }}">Office Management</a>
-                    </div>
+                        @endif
+                        @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'direksi' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen')
+                        <a href="{{ route('partnerships.index') }}" class="collapse-item">Partnership</a>
+                        @endif
+                    </div> 
                 </div>
             </li>
+            
 
             <!-- Nav Item - Utilities Collapse Menu -->
+            @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'karyawan' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen' || Auth::user()->role->name == 'administrasi')
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -87,58 +100,78 @@
                     </div>
                 </div>
             </li>
+            @endif
 
+            @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen' || Auth::user()->role->name == 'administrasi')
             <li class="nav-item {{ Request::is('journal') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('journal.index') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Journal</span></a>
             </li>
+            @endif
+            @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'karyawan' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen')
+            <li class="nav-item {{ Request::is('cuti') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('cuti.index') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Pengajuan cuti dan lembur</span></a>
+            </li>
+            @endif
 
+            @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'direksi' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen')
             <li class="nav-item {{ Request::is('assets') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('assets.index') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Asset</span></a>
             </li>
-            <li class="nav-item {{ Request::is('partnerships') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('partnerships.index') }}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Partnership</span></a>
-            </li>
+            @endif
+
+            @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen' || Auth::user()->role->name == 'administrasi')
             <li class="nav-item {{ Request::is('legalitas') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('legalitas.index') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Legalitas</span></a>
             </li>
+            @endif
 
+            @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen' || Auth::user()->role->name == 'administrasi')
             <li class="nav-item {{ Request::is('paklarings') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('paklarings.index') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Paklaring</span></a>
             </li>
+            @endif
 
+            @if (Auth::user()->role->name != 'karyawan')
             <li class="nav-item {{ Request::is('rab') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('rab.index') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>RAB</span></a>
             </li>
+            @endif
 
+            @if (Auth::user()->role->name != 'karyawan')
             <li class="nav-item {{ Request::is('reimburstment') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('reimburstment.index') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Reimbursment</span></a>
             </li>
+            @endif
 
+            @if (Auth::user()->role->name != 'karyawan')
             <li class="nav-item {{ Request::is('bpjs') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('bpjs.index') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>BPJS</span></a>
             </li>
+            @endif
 
+            @if (Auth::user()->role->name == 'administrator' || Auth::user()->role->name == 'hrd' || Auth::user()->role->name == 'manajemen' || Auth::user()->role->name == 'administrasi')
             <li class="nav-item {{ Request::is('cooperation') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('cooperation.index') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Cooperation</span></a>
             </li>
+            @endif
 
 
         </ul>

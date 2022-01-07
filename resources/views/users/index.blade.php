@@ -6,9 +6,11 @@
             <div>
                 User Management
             </div>
+            @if (Auth::user()->role->name == 'administrator')
             <div>
                 <a href="{{ route('user.create') }}" class="btn btn-primary">Tambah User</a>
             </div>
+            @endif
         </div>
         <div class="card-body">
             <table class="table">
@@ -17,7 +19,9 @@
                         <th scope="col">#</th>
                         <th scope="col">Nama</th>
                         <th scope="col">Kantor</th>
+                        @if (Auth::user()->role->name == 'administrator')
                         <th scope="col">Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -30,7 +34,9 @@
                         <td>
                             {{$item->office->name}}
                         </td>
+                        @if (Auth::user()->role->name == 'administrator')
                         <td class="d-flex">
+                            
                             <a href="{{ route('user.edit', $item->id) }}" class="btn btn-success">Edit</a>
                             <form action="{{ route('user.destroy', $item->id) }}" method="POST">
                             @csrf
@@ -38,6 +44,7 @@
                                 <button type="submit" class="btn btn-danger ml-2">Hapus</button>
                             </form>
                         </td>
+                        @endif
                     </tr>
                     @empty
                     <tr>
