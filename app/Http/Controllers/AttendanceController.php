@@ -6,7 +6,7 @@ use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use PDF;
 class AttendanceController extends Controller
 {
     public function __construct()
@@ -38,6 +38,14 @@ class AttendanceController extends Controller
 
             return view('attendance.index', compact('attendances'));
         }
+    }
+
+    public function export()
+    {
+        $attendances = Attendance::all();
+
+        $pdf = PDF::loadview('pdf.attendance',['attendances'=>$attendances]);
+    	return $pdf->download('laporan-absensi.pdf');
     }
 
     /**

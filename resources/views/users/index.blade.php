@@ -8,6 +8,7 @@
             </div>
             @if (Auth::user()->role->name == 'administrator')
             <div>
+                <a href="{{ route('user.pdf') }}" class="btn btn-danger mr-2">Export PDF</a>
                 <a href="{{ route('user.create') }}" class="btn btn-primary">Tambah User</a>
             </div>
             @endif

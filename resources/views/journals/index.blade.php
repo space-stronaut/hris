@@ -41,7 +41,7 @@
                             {{ Storage::url($item->document) }}
                         </td>
                         <td>
-                            <a href="{{ route('rab.download', $item->id) }}" class="btn btn-info">Unduh</a>
+                            <a href="{{ route('journal.download', $item->id) }}" class="btn btn-info">Unduh</a>
                         </td>
                         <td>
                             <div class="badge badge-info text-uppercase">{{ $item->status }}</div>

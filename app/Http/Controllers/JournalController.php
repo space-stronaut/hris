@@ -123,7 +123,7 @@ class JournalController extends Controller
 
     public function download($id)
     {
-        $i = Journal::find($id)->foto_journal;
+        $i = Journal::find($id)->foto;
 
         return response()->download(storage_path('app/public/'. $i));
     }

@@ -60,5 +60,10 @@ Route::get('/bpjs/download/{id}', [BpjsController::class, 'download'])->name('bp
 Route::post('/paklaring/confirm/{id}', [PaklaringController::class, 'confirm'])->name('paklaring.confirm');
 Route::get('/paklaring/download/{id}', [PaklaringController::class, 'download'])->name('paklaring.download');
 Route::resource('cuti', CutiController::class);
+Route::post('/reimburstment/confirm/{id}', [ReimburstmentController::class, 'confirm'])->name('reimburstment.confirm');
+Route::get('/reimburstment/download/{id}', [ReimburstmentController::class, 'download'])->name('reimburstment.download');
 Route::post('/cuti/validasi/{id}', [CutiController::class, 'validasi'])->name('cuti.validasi');
 Route::get('/payroll/download/{id}', [PayrollController::class, 'download'])->name('payroll.download');
+Route::get('/users/pdf', [UserController::class, 'export'])->name('user.pdf');
+Route::get('/attendances/pdf', [AttendanceController::class, 'export'])->name('attendance.pdf');
+Route::get('/reimburstments/pdf', [ReimburstmentController::class, 'export'])->name('reimburstment.pdf');

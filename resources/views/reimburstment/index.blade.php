@@ -19,7 +19,7 @@
                         <th scope="col">Kantor</th>
                         <th scope="col">Position</th>
                         <th scope="col">Aktivitas</th>
-                        <th scope="col">Nota</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
@@ -40,7 +40,7 @@
                             {{$item->activity}}
                         </td>
                         <td>
-                            {{$item->nota}}
+                            {{$item->status}}
                         </td>
                         <td class="d-flex">
                             <a href="{{ route('reimburstment.edit', $item->id) }}" class="btn btn-success">Edit</a>
@@ -49,6 +49,17 @@
                             @method('delete')
                                 <button type="submit" onclick="return confirm('Apa anda yakin ingin menghapusnya?')" class="btn btn-danger ml-2">Hapus</button>
                             </form>
+                            <form action="{{ route('reimburstment.confirm', $item->id) }}" method="post">
+                                @csrf
+                                <input type="hidden" name="status" value="disetujui">
+                                <button class="btn btn-info ml-2">Setujui</button>
+                            </form>
+                            <form action="{{ route('reimburstment.confirm', $item->id) }}" method="post">
+                                @csrf
+                                <input type="hidden" name="status" value="ditolak">
+                                <button class="btn btn-warning ml-2">Tolak</button>
+                            </form>
+                            <a href="{{ route('reimburstment.download', $item->id) }}" class="btn btn-success">Unduh Nota</a>
                         </td>
                     </tr>
                     @empty

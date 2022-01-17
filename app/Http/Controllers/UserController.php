@@ -6,6 +6,7 @@ use App\Models\Office;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use PDF;
 
 class UserController extends Controller
 {
@@ -127,5 +128,13 @@ class UserController extends Controller
         User::find($id)->delete();
 
         return redirect()->back();
+    }
+
+    public function export()
+    {
+        $users = User::all();
+ 
+    	$pdf = PDF::loadview('pdf.user',['users'=>$users]);
+    	return $pdf->download('laporan-users.pdf');
     }
 }

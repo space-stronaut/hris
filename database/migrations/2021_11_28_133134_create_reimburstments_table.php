@@ -20,7 +20,8 @@ class CreateReimburstmentsTable extends Migration
             $table->unsignedBigInteger('office_id');
             $table->foreign('office_id')->references('id')->on('office')->onDelete('cascade')->onUpdate('cascade');
             $table->string('activity');
-            $table->string('nota')->nullable();
+            $table->text('nota')->nullable();
+            $table->enum('status', ['proses', 'disetujui', 'ditolak']);
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Note</label>
-                    <input type="text" class="form-control" name="nota">
+                    <input type="file" class="form-control" name="nota">
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Submit</button>
