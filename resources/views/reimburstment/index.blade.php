@@ -7,6 +7,7 @@
                 Reimbursment
             </div>
             <div>
+                <a href="{{ route('reimburstment.pdf') }}" class="btn btn-danger mr-2">Export PDF</a>
                 <a href="{{ route('reimburstment.create') }}" class="btn btn-primary">Tambah Reimbursment</a>
             </div>
         </div>

@@ -10,6 +10,9 @@
         <div>
             Riwayat Absensi
         </div>
+        <div>
+            <a href="{{ route('attendance.pdf') }}" class="btn btn-danger mr-2">Export PDF</a>
+        </div>
     </div>
     <div class="card-body">
         @if (session()->has('message'))
